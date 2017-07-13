@@ -1,0 +1,17 @@
+{
+  "name": "node",
+  "version": "0.0.0",
+  "description": "Tile Variant Searcher",
+  "main": "tileServer.js",
+  "dependencies": {
+    "express": "^4.15.3",
+    "python-shell": "^0.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Kevin Fang",
+  "license": "ISC"
+}
