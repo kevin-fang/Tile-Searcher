@@ -1,3 +1,7 @@
 keep/
 *.log
 node_modules/
+*.fwi
+*.gz
+*.gzi
+hiq-pgp-info
