@@ -15,7 +15,13 @@ app.get('/tile', (req, res) => {
 		get_name = 'true'
 	}
 	console.log("Finding tile for index: " + index + ", json status: " + json)
-	res.setHeader('Content-Type', 'text/json')
+	if (json == 'true') {
+		json = true
+		res.setHeader('Content-Type', 'text/json')
+	} else {
+		json = false
+		res.setHeader('Content-Type', 'text/html')
+	}
 	var options = {
 		mode: 'text',
 		scriptPath: '../svc-eye-classifier/tiling/',
@@ -35,7 +41,13 @@ app.get('/tile', (req, res) => {
 	}
 	var shell = new PythonShell('getTileVariants.py', options)
 	var results = ""
-	shell.on('message', (message) => { results = results + message + '\n' })
+	shell.on('message', (message) => { 
+		if (json) {
+			results = results + message + '\n'
+		} else {
+			results = results + message + '<br/>'
+		}
+	})
 	shell.on('error', (err) => {
 		res.write("An error occured. Please send the following information to the server host:\n" + err)
 		console.log(err)
@@ -81,7 +93,7 @@ app.get('/tile', (req, res) => {
 		}
 
 
-		if (json == 'true') {
+		if (json) {
 			res.write(JSON.stringify(resultsObj));
 		} else {
 			res.write(results)
