@@ -24,8 +24,8 @@ app.get('/tile', (req, res) => {
 	}
 	var options = {
 		mode: 'text',
-		scriptPath: './tiling',
-		args: ['--hiq-info=./tiling/hiq-pgp-info', '--index=' + index, '--assembly-fwi=./tiling/assembly.00.hg19.fw.fwi', '--assembly-gz=./tiling/assembly.00.hg19.fw.gz', '--keep=./keep/by_id/su92l-4zz18-fkbdz2w6b25ayj3']
+		scriptPath: './',
+		args: ['--hiq-info=./tiling_files/hiq-pgp-info', '--index=' + index, '--assembly-fwi=./tiling_files/assembly.00.hg19.fw.fwi', '--assembly-gz=./tiling_files/assembly.00.hg19.fw.gz', '--keep=./keep/by_id/su92l-4zz18-fkbdz2w6b25ayj3']
 	}
 	if (get_base_locs == 'true') {
 		options.args.push('-b')
