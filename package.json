@@ -1,6 +1,6 @@
 {
-  "name": "node",
-  "version": "0.0.0",
+  "name": "tile-variant-searcher",
+  "version": "1.0.0",
   "description": "Tile Variant Searcher",
   "main": "tileServer.js",
   "dependencies": {
