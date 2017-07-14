@@ -1,4 +1,5 @@
 #!/bin/sh
+cd tiling_files
 
 if [ ! -f ./assembly.00.hg19.fw.fwi ]; then
 	wget https://workbench.su92l.arvadosapi.com/collections/download/su92l-4zz18-lj22pmb8h3ty0w8/1ojgsdawy3ldxu74nlu1cbkjduyadovqy2xcbmi1ui7wcpetaz/assembly.00.hg19.fw.fwi
