@@ -14,9 +14,7 @@ app.get('/tile', (req, res) => {
 	}
 	var shell = new PythonShell('getTileVariants.py', options)
 	var results = ""
-	shell.on('message', (message) => {
-		results = results + message + '\n'
-	})
+	shell.on('message', (message) => { results = results + message + '\n' })
 	shell.on('error', (err) => {
 		res.write("An error occured. Please send the following information to the server host:\n" + err)
 		console.log(err)
@@ -71,7 +69,7 @@ app.get('/tile', (req, res) => {
 	})
 })
 
-const port = 8082
+const port = 8080
 app.listen(port);
 
 console.log("Listening on port: " + port)

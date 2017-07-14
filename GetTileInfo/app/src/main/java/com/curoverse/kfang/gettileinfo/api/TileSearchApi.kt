@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 /**
- * Created by kfang on 7/14/17.
+ * Tile search API with Retrofit
  */
 interface TileSearchApi {
     @GET("/tile?json=true")

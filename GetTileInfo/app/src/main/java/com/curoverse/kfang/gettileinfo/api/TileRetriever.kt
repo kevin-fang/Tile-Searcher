@@ -11,22 +11,18 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 /**
- * Created by kfang on 7/14/17.
+ * Tile Retriever class that calls retrofit
  */
 class TileRetriever {
     private val service: TileSearchApi
-    val okHttpClient: OkHttpClient
-
-    init {
-        okHttpClient = OkHttpClient.Builder()
-                .readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .build()
-    }
+    val okHttpClient: OkHttpClient = OkHttpClient.Builder()
+            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .build()
 
     init {
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://192.168.1.156:8082")
+                .baseUrl("http://192.168.1.156:8080")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())

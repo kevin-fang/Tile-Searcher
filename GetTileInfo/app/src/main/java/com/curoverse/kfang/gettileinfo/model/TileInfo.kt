@@ -15,6 +15,7 @@ data class TileInfo (val search: ArrayList<String>,
                        val name: String,
                        val variants: ArrayList<String>) : Parcelable {
     companion object {
+        @Suppress("unused")
         @JvmField val CREATOR: Parcelable.Creator<TileInfo> = object : Parcelable.Creator<TileInfo> {
             override fun createFromParcel(source: Parcel): TileInfo = TileInfo(source)
             override fun newArray(size: Int): Array<TileInfo?> = arrayOfNulls(size)
