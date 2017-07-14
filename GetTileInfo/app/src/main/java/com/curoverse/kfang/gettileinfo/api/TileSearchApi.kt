@@ -1,6 +1,7 @@
 package com.curoverse.kfang.gettileinfo.api
 
 import com.curoverse.kfang.gettileinfo.model.TileInfo
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -10,5 +11,5 @@ import retrofit2.http.Query
  */
 interface TileSearchApi {
     @GET("/tile")
-    fun getTile(@Query("index") index: Int) : Call<TileInfo>
+    fun getTile(@Query("index") index: Int) : Observable<TileInfo>
 }
