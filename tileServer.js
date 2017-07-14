@@ -5,12 +5,33 @@ var PythonShell = require("python-shell")
 app.get('/tile', (req, res) => {
 	index = req.query.index
 	json = req.query.json
+	get_base_locs = req.query.get_base_locs
+	get_variants = req.query.get_variants
+	get_name = req.query.get_name
+	get_all = req.query.all
+	if (get_all) {
+		get_base_locs = 'true'
+		get_variants = 'true'
+		get_name = 'true'
+	}
 	console.log("Finding tile for index: " + index + ", json status: " + json)
 	res.setHeader('Content-Type', 'text/json')
 	var options = {
 		mode: 'text',
 		scriptPath: '../svc-eye-classifier/tiling/',
-		args: ['--hiq-info=../svc-eye-classifier/tiling/hiq-pgp-info', '--index=' + index, '-l', '--assembly-fwi=../svc-eye-classifier/tiling/assembly.00.hg19.fw.fwi', '-b', '--assembly-gz=../svc-eye-classifier/tiling/assembly.00.hg19.fw.gz', '-v', '--keep=./keep/by_id/su92l-4zz18-fkbdz2w6b25ayj3']
+		args: ['--hiq-info=../svc-eye-classifier/tiling/hiq-pgp-info', '--index=' + index, '--assembly-fwi=../svc-eye-classifier/tiling/assembly.00.hg19.fw.fwi', '--assembly-gz=../svc-eye-classifier/tiling/assembly.00.hg19.fw.gz', '--keep=./keep/by_id/su92l-4zz18-fkbdz2w6b25ayj3']
+	}
+	if (get_base_locs == 'true') {
+		options.args.push('-b')
+		console.log("Finding base pair locations")
+	}
+	if (get_variants == 'true') {
+		options.args.push('-v')
+		console.log("Finding variants")
+	}
+	if (get_name == 'true') {
+		options.args.push('-l')
+		console.log("Finding tile name")
 	}
 	var shell = new PythonShell('getTileVariants.py', options)
 	var results = ""
