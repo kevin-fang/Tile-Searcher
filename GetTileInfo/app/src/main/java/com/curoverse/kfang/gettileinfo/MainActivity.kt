@@ -1,5 +1,6 @@
 package com.curoverse.kfang.gettileinfo
 
+import android.content.Context
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
@@ -14,6 +15,12 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import android.view.inputmethod.InputMethodManager.HIDE_NOT_ALWAYS
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.KeyEvent
+import android.view.inputmethod.InputMethodManager
+import android.view.KeyEvent.KEYCODE_ENTER
+import android.widget.TextView.OnEditorActionListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,6 +41,9 @@ class MainActivity : AppCompatActivity() {
         setLoading(false)
         allViews = arrayOf(bp_start, bp_end, base_pair_title, tile_name, to_search, tile_path, tile_step, tile_phase, variants)
         call_api.setOnClickListener {
+            val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputManager.hideSoftInputFromWindow(currentFocus!!.windowToken,
+                    InputMethodManager.HIDE_NOT_ALWAYS)
             val index = getIndex()
             if (index == null) {
                 index_input.error = "Empty input"
@@ -41,6 +51,13 @@ class MainActivity : AppCompatActivity() {
                 allViews.forEach { it.visibility = View.GONE }
                 makeCall(index)
             }
+        }
+        index_input.setOnEditorActionListener { _, _, event ->
+            if (event == null) {
+                call_api.callOnClick()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
         }
         if (savedInstanceState != null) {
             tile = savedInstanceState.getParcelable<TileInfo>(TILE_INFO)
