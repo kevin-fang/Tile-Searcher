@@ -10,6 +10,6 @@ import retrofit2.http.Query
  * Created by kfang on 7/14/17.
  */
 interface TileSearchApi {
-    @GET("/tile")
+    @GET("/tile?json=true")
     fun getTile(@Query("index") index: Int) : Observable<TileInfo>
 }
