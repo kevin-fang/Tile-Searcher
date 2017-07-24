@@ -99,6 +99,7 @@ app.get('/tile', (req, res) => {
 
 		if (json) {
 			var resultsJson = JSON.stringify(resultsObj).replace(/\\t/g, '');
+			res.write(resultsJson)
 			console.log("Finished searching")
 		} else {
 			res.write(results)
