@@ -26,7 +26,7 @@ export class FormComponent extends React.Component {
 
 	handleSubmit() {
 		this.setState({loading: true})
-		this.props.onSubmit(this.state.index, () => this.setState({loading: false}))
+		this.props.onSubmit(this.state.index, (err) => this.setState({loading: false}))
 	}
 
 	handleIndexChange(e) {

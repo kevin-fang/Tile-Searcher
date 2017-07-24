@@ -6,15 +6,14 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import AppBar from 'material-ui/AppBar';
 import { ResultsComponent } from './ResultsComponent'
 import './App.css'
-import Axios from 'axios'
+import request from 'superagent'
+import { callApi } from "./api"
 
 injectTapEventPlugin()
 
 const muiTheme = getMuiTheme({
-	palette: {
-		textColor: 'cyan500',
-	},
 	appBar: {
+		height: 50
 	},
 });
 
@@ -25,26 +24,30 @@ class App extends Component {
 		this.handleSubmit = this.handleSubmit.bind(this)
 		this.state = {
 			resultsLoaded: false,
-			responseJson: ""
+			responseJson: "",
+			index: -1
 		}
 	}
 
 	handleSubmit(index, callback) {
 		this.setState({resultsLoaded: false})
-		Axios.get(`http://192.168.1.156:8080/tile?index=1792420&all=true&json=true`)
-			.then((response) => {
+		callApi(index, (responseJson, err) => {
+			if (err == null) {
 				this.setState({
-					responseLoaded: true,
-					index: index,
-					responseJson: response.data
+						responseLoaded: true,
+						index: index,
+						responseJson: responseJson
+					})
+				callback(null)
+			} else {
+				alert(err)
+				this.setState({
+					responseLoaded: true
 				})
-				alert("recieved response")
-			.catch((error) => {
-				alert(error)
-			})
-			alert(this.state.responseJson)
-			callback()
+				callback(err)
+			}
 		})
+		
 	}
 
   	render() {
