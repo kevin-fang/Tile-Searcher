@@ -1,3 +1,5 @@
+#!/usr/bin/env nodejs
+
 var express = require("express")
 var app = express()
 var PythonShell = require("python-shell")
@@ -8,11 +10,14 @@ app.get('/tile', (req, res) => {
 	get_base_locs = req.query.get_base_locs
 	get_variants = req.query.get_variants
 	get_name = req.query.get_name
+	get_diff_indices = req.query.get_diff_indices
 	get_all = req.query.all
+
 	if (get_all) {
 		get_base_locs = 'true'
 		get_variants = 'true'
 		get_name = 'true'
+		get_diff_indices = 'true'
 	}
 	console.log("Finding tile for index: " + index + ", json status: " + json)
 	if (json == 'true') {
@@ -29,16 +34,17 @@ app.get('/tile', (req, res) => {
 	}
 	if (get_base_locs == 'true') {
 		options.args.push('-b')
-		console.log("Finding base pair locations")
 	}
 	if (get_variants == 'true') {
 		options.args.push('-v')
-		console.log("Finding variants")
 	}
 	if (get_name == 'true') {
 		options.args.push('-l')
-		console.log("Finding tile name")
 	}
+	if (get_diff_indices == 'true') {
+		options.args.push('-vdi')
+	}
+
 	var shell = new PythonShell('getTileVariants.py', options)
 	var results = ""
 	shell.on('message', (message) => { 
@@ -64,12 +70,8 @@ app.get('/tile', (req, res) => {
 		if (results.includes("Variant Information")) {
 			resultsObj.search.push("Variant Information")
 		} 
-		if (results.includes("Variant Diff Information")) {
-			resultsObj.search.push("Variant Diff Information ")
-		}
 		
 		resultsArr = results.split('\n')
-		console.log(resultsArr)
 		for (var i = 0; i < resultsArr.length; i++) {
 			if (resultsArr[i].includes("Tile Path")) {
 				resultsObj.tile_path = resultsArr[i].substring(11)
@@ -82,6 +84,8 @@ app.get('/tile', (req, res) => {
 				resultsObj.base_pair_end = resultsArr[i + 2]
 			} else if (resultsArr[i].includes("hg19")) {
 				resultsObj.name = resultsArr[i]
+			} else if (resultsArr[i].includes("Variant Diff Indices")) {
+				resultsObj.different_indices = resultsArr[i].substring(22)
 			} else if (resultsArr[i].includes("Variant Information")) {
 				resultsObj.variants = []
 				i += 1
@@ -94,9 +98,11 @@ app.get('/tile', (req, res) => {
 
 
 		if (json) {
-			res.write(JSON.stringify(resultsObj));
+			var resultsJson = JSON.stringify(resultsObj).replace(/\\t/g, '');
+			console.log("Finished searching")
 		} else {
 			res.write(results)
+			console.log("Finished searching")
 		}
 		res.end();
 	})

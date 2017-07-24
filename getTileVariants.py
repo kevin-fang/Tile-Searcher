@@ -17,14 +17,15 @@ parser.add_argument('-i', '--index', type=int, help="An index of the tile", requ
 parser.add_argument('--hiq-info', type=str, help="Location of tile names (for PGP, it is called hiq-pgp-info)", required=True)
 parser.add_argument('-l', '--get-location', type=int, nargs='?', default=False, help="Whether to get tile location (requires cat, grep, and assembly.00.hg19.fw.fwi)")
 parser.add_argument('-v', '--get-variants', type=int, nargs='?', default=False, help="Whether to get tile variants (a/t/c/g) (requires zgrep and the keep collection with *.sglf.gz)")
-parser.add_argument('-vd', '--get-variants-diff', type=int, nargs='?', default=False, help="Whether to get tile variants (a/t/c/g) with diffs. Takes longer than -v, still requires zgrep and keep collection.")
+parser.add_argument('-pvd', '--print-variant-diffs', type=int, nargs='?', default=False, help="Whether to print the tile variants (a/t/c/g) diffs. Takes longer than -v, still requires zgrep and keep collection.")
+parser.add_argument('-vdi', '--get-variant-diff-indices', type=int, nargs='?', default=False, help="Whether to print the tile variants with diff indices. Takes longer than -v, still requires zgrep and keep colleciton.")
 parser.add_argument('-b', '--get-base-pairs', type=int, nargs='?', default=False, help="Whether to get base pair locations (requires bgzip and assembly.00.hg19.fw.gz)")
 parser.add_argument('--assembly-gz', type=str, nargs='?', default=None, help="Location of assembly.00.hg19.fw.gz")
 parser.add_argument('--keep', type=str, nargs='?', default=None, help="Location of keep collection with *.sglf.gz")
 parser.add_argument('--assembly-fwi', type=str, nargs='?', default=None, help="Location of assembly.00.hg19.fw.fwi")
 args = parser.parse_args()
 
-if args.get_location == args.get_variants == args.get_variants_diff == args.get_base_pairs == False:
+if args.get_location == args.get_variants == args.print_variant_diffs == args.get_variant_diff_indices == args.get_base_pairs == False: 
     print "Nothing to find. Exiting..."
     sys.exit(0) 
 
@@ -42,12 +43,18 @@ if args.get_variants == None:
         sys.exit(1)
     args.get_variants = True
     print "Tile variants"
-if args.get_variants_diff == None:
+if args.print_variant_diffs == None:
     if args.keep == None:
         print "Cannot get variant diffs without --keep argument. Exiting..."
         sys.exit(1)
-    args.get_variants_diff = True
-    print "Tile variant with differences"
+    args.print_variant_diffs = True
+    print "Annotated Tile Variant Diffs"
+if args.get_variant_diff_indices == None:
+    if args.keep == None:
+        print "Cannot get variant diffs without --keep argument. Exiting..."
+        sys.exit(1)
+    args.get_variant_diff_indices = True
+    print "Tile Variant Diff Indices"
 if args.get_base_pairs == None: 
     if args.assembly_gz == None:
         print "Cannot get base pair location without --assembly-gz argument. Exiting..."
@@ -122,33 +129,53 @@ if (args.get_variants):
     print "Variant Information:"
     print variants
 
+def getDifferentIndices(sequences):
+    differentIndices = []
+    maxList = max(enumerate(sequences), key= lambda tup: len(tup[1]))[1]
+    for i, letter in enumerate(maxList):
+        diff = False
+        for sequence in sequences:
+            if diff == False and (i >= len(sequence) or sequence[i] != letter):
+                differentIndices.append(i)
+                diff = True
+    return differentIndices
+
+if args.get_variant_diff_indices:
+    try:
+        variants = subprocess.check_output("zgrep %s.00.%s %s/%s.sglf.gz" % (tilePath, tileStep, args.keep, tilePath), shell=True)
+    except CalledProcessError:
+        print "Collection not found or `zgrep` command not available. Finishing..."
+        sys.exit()
+
+    variants = variants.split('\n')[:-1]
+
+    for i, variant in enumerate(variants):
+        variants[i] = variant.split(',')
+
+    sequences = []
+
+    for _, _, sequence in variants:
+        sequences.append(sequence)
+    print "Variant Diff Indices:", getDifferentIndices(sequences) 
+
 # get differences in variants using zgrep and difference checking
-if (args.get_variants_diff):
+if args.print_variant_diffs:
     try:
         variants = subprocess.check_output("zgrep %s.00.%s %s/%s.sglf.gz" % (tilePath, tileStep, args.keep, tilePath), shell=True) 
     except CalledProcessError:
         print "Collection not found or `zgrep` command not available. Finishing..."
 	sys.exit()
     
-    print "Variant Diff Information (" + color.RED + "red" + color.END + " denotes a different base pair):"
+    print "Annotated Variant Diffs (" + color.RED + "red" + color.END + " denotes a different base pair):"
     # split into each variant
     variants = variants.split('\n')[:-1]
     for i, variant in enumerate(variants):
 	variants[i] = variant.split(',')
-    differentIndices = []
     sequences = []
     for _, _, sequence in variants:
         sequences.append(sequence)
     
-    maxList = max(enumerate(sequences), key = lambda tup: len(tup[1]))[1]
-    # loop through sequences and check for differences in base pairs. If there is, then append to list
-    for i, letter in enumerate(maxList):
-        diff = False
-	for sequence in sequences:
-            if diff == False and (i >= len(sequence) or sequence[i] != letter):
-                differentIndices.append(i)
-                diff = True 
-    
+    differentIndices = getDifferentIndices(sequences) 
     # print out results 
     for variant in variants:
         # print out tile name and hash value
@@ -170,3 +197,4 @@ if (args.get_variants_diff):
             elif i + 1 not in differentIndices and not diffStatus:
                 sys.stdout.write(letter)
         print color.END
+

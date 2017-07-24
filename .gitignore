@@ -5,3 +5,4 @@ node_modules/
 *.gz
 *.gzi
 hiq-pgp-info
+tile-searcher-react/node_modules/
