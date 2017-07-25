@@ -6,7 +6,6 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import AppBar from 'material-ui/AppBar';
 import { ResultsComponent } from './ResultsComponent'
 import './App.css'
-import request from 'superagent'
 import { callApi } from "./api"
 
 injectTapEventPlugin()
@@ -40,26 +39,26 @@ class App extends Component {
 					})
 				callback(null)
 			} else {
-				alert(err)
 				this.setState({
 					responseLoaded: true
 				})
 				callback(err)
 			}
 		})
-		
+
 	}
 
   	render() {
     	return (
 			<MuiThemeProvider muiTheme={muiTheme}>
 		        <div>
-		        	<AppBar 
+		        	<AppBar
 		        	title="Tile Searcher"
+							style={{ margin: 0 }}
 		        	showMenuIconButton={false}/>
 		        	<div className="rowC">
-						<FormComponent onSubmit={this.handleSubmit}/>	
-						{this.state.resultsLoaded ? <ResultsComponent json={this.state.responseJson} index={this.state.index}/> : null}
+						<FormComponent onSubmit={this.handleSubmit}/>
+						{this.state.responseLoaded ? <ResultsComponent json={this.state.responseJson} index={this.state.index}/> : null}
 					</div>
 				</div>
 			</MuiThemeProvider>

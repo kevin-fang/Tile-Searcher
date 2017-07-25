@@ -1,9 +1,10 @@
 #!/usr/bin/env nodejs
-
 var express = require("express")
 var app = express()
+var cors = require("cars")
 var PythonShell = require("python-shell")
 
+app.use(cors())
 app.get('/tile', (req, res) => {
 	index = req.query.index
 	json = req.query.json
@@ -47,7 +48,7 @@ app.get('/tile', (req, res) => {
 
 	var shell = new PythonShell('getTileVariants.py', options)
 	var results = ""
-	shell.on('message', (message) => { 
+	shell.on('message', (message) => {
 		if (json) {
 			results = results + message + '\n'
 		} else {
@@ -60,17 +61,17 @@ app.get('/tile', (req, res) => {
 	})
 	shell.on('close', () => {
 		resultsObj = new Object()
-		resultsObj.search = []	
+		resultsObj.search = []
 		if (results.includes("Tile location")) {
 			resultsObj.search.push("Tile Location")
 		}
 		if (results.includes("Base pair location")) {
 			resultsObj.search.push("Base Pair Location")
-		} 
+		}
 		if (results.includes("Variant Information")) {
 			resultsObj.search.push("Variant Information")
-		} 
-		
+		}
+
 		resultsArr = results.split('\n')
 		for (var i = 0; i < resultsArr.length; i++) {
 			if (resultsArr[i].includes("Tile Path")) {
