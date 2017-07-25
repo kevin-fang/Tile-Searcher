@@ -1,11 +1,12 @@
 #!/usr/bin/env nodejs
 var express = require("express")
 var app = express()
-var cors = require("cars")
+var cors = require("cors")
 var PythonShell = require("python-shell")
 
 app.use(cors())
 app.get('/tile', (req, res) => {
+	console.log("url: " + req.url)
 	index = req.query.index
 	json = req.query.json
 	get_base_locs = req.query.get_base_locs
@@ -46,8 +47,8 @@ app.get('/tile', (req, res) => {
 		options.args.push('-vdi')
 	}
 
-	var shell = new PythonShell('getTileVariants.py', options)
 	var results = ""
+	var shell = new PythonShell('getTileVariants.py', options)
 	shell.on('message', (message) => {
 		if (json) {
 			results = results + message + '\n'
@@ -61,6 +62,7 @@ app.get('/tile', (req, res) => {
 	})
 	shell.on('close', () => {
 		resultsObj = new Object()
+		resultsObj.index = index 
 		resultsObj.search = []
 		if (results.includes("Tile location")) {
 			resultsObj.search.push("Tile Location")
@@ -70,6 +72,9 @@ app.get('/tile', (req, res) => {
 		}
 		if (results.includes("Variant Information")) {
 			resultsObj.search.push("Variant Information")
+		}
+		if (results.includes("Tile Variant Diff Indices")) {
+			resultsObj.search.push("Tile Variant Diff Indices")
 		}
 
 		resultsArr = results.split('\n')
@@ -84,7 +89,7 @@ app.get('/tile', (req, res) => {
 				resultsObj.base_pair_start = resultsArr[i + 1]
 				resultsObj.base_pair_end = resultsArr[i + 2]
 			} else if (resultsArr[i].includes("hg19")) {
-				resultsObj.name = resultsArr[i]
+				resultsObj.name = resultsArr[i].replace(/\t/g, ' ') 
 			} else if (resultsArr[i].includes("Variant Diff Indices")) {
 				resultsObj.different_indices = resultsArr[i].substring(22)
 			} else if (resultsArr[i].includes("Variant Information")) {

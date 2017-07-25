@@ -11,52 +11,28 @@ export class ToggleGroup extends React.Component {
 			getDiffIndices: false,
 			indexInputError: false 
 		}
-		this.handleToggle = this.handleToggle.bind(this)
-	}
-
-	handleToggle() {
-		alert(this.props.name + " was toggled")
 	}
 
 	render() {
 		return (
 			<div>
-				<Toggle name="tileName" 
+				<Toggle
 					label="Get Tile Name" 
 					labelPosition="right"
-					onToggle={() => {
-						this.setState({
-							tileName: !this.state.tileName
-							})
-						}
-					}/>
-				<Toggle name="basePairLocations" 
+					onToggle={this.props.tileName}/>
+				<Toggle
 					label="Get Base Pair Locations" 
 					labelPosition="right"
-					onToggle={() => {
-						this.setState({
-							basePairLocations: !this.state.basePairLocations
-							})
-						}
-					}/>
-				<Toggle name="getVariants" 
+					onToggle={this.props.basePair}/>
+				<Toggle
 					label="Get Variants" 
 					labelPosition="right"
-					onToggle={() => {
-						this.setState({
-							getVariants: !this.state.getVariants
-							})
-						}
-					}/>
-				<Toggle name="getDiffIndices" 
+					onToggle={this.props.variant}
+					/>
+				<Toggle 
 					label="Get Diff Indices" 
 					labelPosition="right"
-					onToggle={() => {
-						this.setState({
-							getDiffIndices: !this.state.getDiffIndices
-							})
-						}
-					}/>
+					onToggle={this.props.diff}/>
 			</div>
 			)
 	}

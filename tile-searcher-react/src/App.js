@@ -28,13 +28,13 @@ class App extends Component {
 		}
 	}
 
-	handleSubmit(index, callback) {
+	handleSubmit(searchObject, callback) {
 		this.setState({resultsLoaded: false})
-		callApi(index, (responseJson, err) => {
+		callApi(searchObject, (responseJson, err) => {
 			if (err == null) {
 				this.setState({
 						responseLoaded: true,
-						index: index,
+						index: searchObject.index,
 						responseJson: responseJson
 					})
 				callback(null)
