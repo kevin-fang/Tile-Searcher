@@ -17,7 +17,7 @@ export function callApi(searchObject, callback) {
 			callback(response.data, null)
 		})
 		.catch((error) => {
-			alert("error" + error)
+			alert(error)
 			console.log(error)
 			callback(null, error)
 		}) 

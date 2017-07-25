@@ -72,9 +72,9 @@ export class ResultsComponent extends React.Component {
 							<div>
 								{diffIndices != null ? <p>Different Indices: {diffIndices}</p> : null}
 							</div>
-							<div>
+							<ul>
 								{variantList != null ? variantList : null}
-							</div>
+							</ul>
 						</CardText>
 				</Card>
 			</div>

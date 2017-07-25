@@ -1,6 +1,6 @@
 keep/
 *.log
-node_modules/
+tile-searcher-backend/node_modules/
 *.fwi
 *.gz
 *.gzi
