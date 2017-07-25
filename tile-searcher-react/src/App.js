@@ -11,6 +11,7 @@ import { callApi } from "./api"
 injectTapEventPlugin()
 
 const muiTheme = getMuiTheme({
+	margin: 0,
 	appBar: {
 		height: 50
 	},
@@ -53,9 +54,9 @@ class App extends Component {
 			<MuiThemeProvider muiTheme={muiTheme}>
 		        <div>
 		        	<AppBar
-		        	title="Tile Searcher"
-							style={{ margin: 0 }}
-		        	showMenuIconButton={false}/>
+		        		title="Tile Searcher"
+						style={{ margin: 0 }}
+		        		showMenuIconButton={false}/>
 		        	<div className="rowC">
 						<FormComponent onSubmit={this.handleSubmit}/>
 						{this.state.responseLoaded ? <ResultsComponent json={this.state.responseJson} index={this.state.index}/> : null}
