@@ -1,7 +1,10 @@
 # Tiling-Server  
 A Python script that prints tile information given tile libraries, `getTileVariants.py`.
 
-This repository also contains a NodeJS web server with a REST API that calls the Python script for easier use, and a simple Android client in `GetTileInfo/` to query the API.
+This repository also contains a NodeJS web server with a REST API that calls the Python script for easier use, and a simple Android client in `TileInfoApp/` to query the API.
+
+To get up and running, set your Arvados API keys and run `./startBackend.sh` and in another terminal, `./startFrontend.sh`. Make sure to change the IP address in the React application!
+
 
 Before starting anything, set the Arvados API keys and run `./setup.sh`
 
