@@ -1,7 +1,8 @@
 import Axios from 'axios'
 
-export function callApi(searchObject, callback) { 
-	Axios.get(`http://192.168.1.156:8080/tile?
+export async function callApi(searchObject, callback) { 
+	try {
+		var response = await Axios.get(`http://192.168.1.156:8080/tile?
 		index=${searchObject.index}
 		&get_base_locs=${searchObject.getBasePairLocations}
 		&get_variants=${searchObject.getVariants}
@@ -12,13 +13,10 @@ export function callApi(searchObject, callback) {
 				'Content-Type': 'text/json'
 				}
 		})
-		.then((response) => {
-			//alert("successful" + JSON.stringify(response.data))
-			callback(response.data, null)
-		})
-		.catch((error) => {
+		callback(response.data, null)
+	} catch(error) {
 			alert(error)
 			console.log(error)
 			callback(null, error)
-		}) 
+	}
 }

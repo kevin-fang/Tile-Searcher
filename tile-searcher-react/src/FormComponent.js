@@ -2,7 +2,6 @@ import React from 'react'
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import { ToggleGroup } from "./ToggleMaterial"
-import CircularProgress from 'material-ui/CircularProgress'
 
 const style = {
 	padding: 16
@@ -61,8 +60,8 @@ export class FormComponent extends React.Component {
 			getVariants: this.state.getVariants,
 			getDiffIndices: this.state.getDiffIndices
 		}
-		this.setState({loading: true})
-		this.props.onSubmit(searchObject, (err) => this.setState({loading: false}))
+		this.props.setLoading(true)
+		this.props.onSubmit(searchObject, (err) => this.props.setLoading(false))
 	}
 
 	handleIndexChange(e) {
@@ -83,7 +82,7 @@ export class FormComponent extends React.Component {
 	render() {
 		return (
 			<div style={style} >
-
+				<b>Input values for tile search</b><br/>
 				<TextField floatingLabelText="Index"
 				 	name="index"
 				 	errorText={() => {
@@ -105,9 +104,8 @@ export class FormComponent extends React.Component {
 					backgroundColor="#303f9f"
 					labelColor="#ffffff"
 					style={submitButtonStyle}
-					onClick={this.handleSubmit}/><br/>
+					onClick={this.handleSubmit}/><br/><br/><br/>
 
-				{this.state.loading ? <CircularProgress style={{margin: 8}}/> : null }
 
 			</div>
 		);

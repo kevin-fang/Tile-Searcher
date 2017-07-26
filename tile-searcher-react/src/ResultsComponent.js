@@ -1,19 +1,15 @@
 import React from 'react'
-import {Card, CardHeader, CardText} from 'material-ui/Card';
+import {Card, CardTitle, CardText} from 'material-ui/Card';
 import "./App.css"
 
 const resultsStyle = {
 	margin: 16,
-	width: '90%',
+	width: '500',
 	height: '90%',
-	wordWrap: 'break-all',
 	whiteSpace: 'normal'
 }
 
 export class ResultsComponent extends React.Component {
-	constructor(props) {
-		super(props)
-	}
 	render() {
 		var variantVals = JSON.parse(JSON.stringify(this.props.json))
 		var searchedItems = variantVals.search != null ? variantVals.search[0] : null
@@ -37,19 +33,18 @@ export class ResultsComponent extends React.Component {
 
 		var variantList = variantVals.variants != null ? [] : null
 		if (variantList != null) {
-			for (var i = 0; i < variantVals.variants.length; i++) {
-				variantList.push(<li class="wordWrap">{variantVals.variants[i]}</li>)
+			for (i = 0; i < variantVals.variants.length; i++) {
+				variantList.push(<p style={{wordBreak: 'break-all', whiteSpace: 'normal'}}>{variantVals.variants[i]}</p>)
 			}
 		}
 		//alert(variantList.length)
 		var diffIndices = variantVals.different_indices != null ? variantVals.different_indices.toString() : null
 		return (
 			<div style={resultsStyle}>
-				<Card style={{wordWrap: 'break-all', whiteSpace: 'normal'}}>
-					<CardHeader
-						title="Results"
-						subtitle={"For index: " + this.props.index}
-						titleStyle={{'fontWeight':'bold', 'fontSize':20}} />
+				<Card>
+					<CardTitle
+						title="Tile Results"
+						subtitle={"For index: " + this.props.index}/>
 						<CardText >
 							{searchedItems != null ? 
 								<p><b>Searched for:<br/></b> {searchedItems}</p> : 
@@ -70,11 +65,11 @@ export class ResultsComponent extends React.Component {
 								</ul>
 							</div>
 							<div>
-								{diffIndices != null ? <p>Different Indices: {diffIndices}</p> : null}
+								{diffIndices != null ? <p><b>Different Indices: </b>{diffIndices}</p> : null}
 							</div>
-							<ul>
-								{variantList != null ? variantList : null}
-							</ul>
+							<div>
+								{variantList != null ? <p><b>Variant List:</b><br/>{variantList}</p> : null}
+							</div>
 						</CardText>
 				</Card>
 			</div>
