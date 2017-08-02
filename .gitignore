@@ -1,8 +1,9 @@
 keep/
 *.log
-tile-searcher-backend/node_modules/
+clients/tile-searcher-backend/node_modules/
 *.fwi
 *.gz
 *.gzi
 hiq-pgp-info
-tile-searcher-react/node_modules/
+clients/tile-searcher-react/node_modules/
+clients/node_modules/
