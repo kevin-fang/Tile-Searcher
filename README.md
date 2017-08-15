@@ -1,6 +1,5 @@
-# Tiling-Server  
+# Tile Searcher
 A Python script that prints tile information given tile libraries, `getTileVariants.py`.
-
 
 To get up and running, set the Arvados API keys and run `./setup.sh` and then you can call `getTileVariants.py`
 
