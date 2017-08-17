@@ -3,10 +3,11 @@
 # set up keep-mount
 mkdir -p ./keep
 arv-mount ./keep
-cd ./tiling-files
 # download dependencies
 if [ ! -f ./tiling-files ]; then
 	mkdir tiling-files && cd tiling-files
+else
+	cd tiling-files
 fi
 
 if [ ! -f ./assembly.00.hg19.fw.fwi ]; then
