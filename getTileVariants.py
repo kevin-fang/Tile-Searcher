@@ -161,6 +161,7 @@ if args.get_variant_diff_indices:
         sequences.append(sequence)
     
     differentIndices = getDifferentIndices(sequences)
+    # add 1, as counting differences are offset by 1
     differentIndices = map(lambda x: x+1, differentIndices)
     print "Variant Diff Indices:", differentIndices 
 
