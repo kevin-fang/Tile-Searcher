@@ -159,7 +159,10 @@ if args.get_variant_diff_indices:
 
     for _, _, sequence in variants:
         sequences.append(sequence)
-    print "Variant Diff Indices:", getDifferentIndices(sequences) 
+    
+    differentIndices = getDifferentIndices(sequences)
+    differentIndices = map(lambda x: x+1, differentIndices)
+    print "Variant Diff Indices:", differentIndices 
 
 # get differences in variants using zgrep and difference checking
 if args.print_variant_diffs:
