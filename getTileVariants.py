@@ -20,7 +20,7 @@ parser.add_argument('-v', '--get-variants', type=int, nargs='?', default=False, 
 parser.add_argument('-pvd', '--print-variant-diffs', type=int, nargs='?', default=False, help="Whether to print the tile variants (a/t/c/g) diffs. Takes longer than -v, still requires zgrep and keep collection.")
 parser.add_argument('-vdi', '--get-variant-diff-indices', type=int, nargs='?', default=False, help="Whether to print the tile variants with diff indices. Takes longer than -v, still requires zgrep and keep colleciton.")
 parser.add_argument('-b', '--get-base-pairs', type=int, nargs='?', default=False, help="Whether to get base pair locations (requires bgzip and assembly.00.hg19.fw.gz)")
-parser.add_argument('--assembly-gz', type=str, nargs='?', default=None, help="Location of assembly.00.hg19.fw.gz")
+aprser.add_argument('--assembly-gz', type=str, nargs='?', default=None, help="Location of assembly.00.hg19.fw.gz")
 parser.add_argument('--keep', type=str, nargs='?', default=None, help="Location of keep collection with *.sglf.gz")
 parser.add_argument('--assembly-fwi', type=str, nargs='?', default=None, help="Location of assembly.00.hg19.fw.fwi")
 args = parser.parse_args()
