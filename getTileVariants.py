@@ -141,11 +141,10 @@ def tile_iteration(tile, out):
 		
 	if app.functionality['get_diff_indices']: # get the indices of the variant differences
 		out("Index of variant differences: {}\n".format(tile.clustalo_diffs))
-
+		
 	print("Finished search for tile {}".format(tile.index))
 
-#with open('test.txt', 'w') as f:
-#	map((lambda tile: tile_iteration(tile, print)), app.tiles)
+
 for tile in app.tiles:
 	with open("{}.txt".format(tile.index), 'w') as f:
 		tile_iteration(tile, f.write)
