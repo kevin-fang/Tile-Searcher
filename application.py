@@ -2,22 +2,35 @@ from subprocess import call, Popen, PIPE, STDOUT
 import os
 from collections import defaultdict
 
+# test whether a command is available to the comptuer
 def test_command(command, error_msg):
-		# tests the following commands based on input: bgzip, zgrep, clustalo, cat
 		try:
 			call(command, stdout=PIPE, stderr=PIPE)
 		except OSError as e:
 			if e.errno == os.errno.ENOENT:
 				raise Exception(error_msg)
 
-class Application:
+class Tile:
+	def __init__(self, index):
+		self.index = index
+		self.path = None
+		self.phase = None
+		self.step = None
+		self.tile_str = None
+
+	def __str__(self):
+		return "Tile {} information:\n{}\nPath: {}\nStep: {}\nPhase: {}".format(self.index, self.tile_str, self.path, self.step, self.phase)
+
+class TileApplication:
+	# initialize False defaultdicts for functionality and data
 	def __init__(self):
 		self.functionality = defaultdict(lambda: False)
 		self.data = defaultdict(lambda: False)
+		self.tiles = []
 
 	def set_functionality(self, args):
 		# parse functionality from input and save to dictionary
-		
+		self.tiles.append(Tile(args.index))
 		if args.get_location == None:
 			if args.assembly_fwi == None:
 				raise Exception("Cannot get tile location without --assembly-fwi argument.")

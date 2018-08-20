@@ -17,10 +17,14 @@ def setup_parsing(app):
 	app.parser.add_argument('--assembly-fwi', type=str, nargs='?', default=None, help="Location of assembly.00.hg19.fw.fwi")
 
 def parse_input(app):
+	# parse arguments
 	args = app.parser.parse_args()
+
+	# quit if no arguments were specified
 	if args.get_location == args.print_variant_diffs == args.get_diff_indices == args.get_base_pair_locations == False: 
 		raise Exception("Nothing to find.")
 
+	# set functionality and data locations based on parsed arguments
 	app.set_functionality(args)
 	app.save_data_args(args)
 	return app
