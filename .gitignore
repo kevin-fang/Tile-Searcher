@@ -1,4 +1,5 @@
 keep/
+*.pyc
 *.log
 clients/tile-searcher-backend/node_modules/
 *.fwi
