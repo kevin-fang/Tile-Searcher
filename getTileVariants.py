@@ -192,6 +192,7 @@ def print_red_diffs(variants):
 
 def print_clustalo_diffs(variants):
     fasta = clustalo.convert_list_to_fasta(variants)
+    print(clustalo.get_clustalo(fasta)[0])
     for item in clustalo.get_clustalo(fasta)[0]:
         print "\n".join(item)
     #print "".join(clustalo.get_clustalo(fasta)[0])
