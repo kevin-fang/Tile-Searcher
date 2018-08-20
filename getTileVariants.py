@@ -22,7 +22,7 @@ parseInput.parse_input(app)
 app.test_command_availability()
 
 # set up information needed for tile search
-coefPaths = np.load(app.data['hiq_info'])
+coefPaths = np.load(app.data['tile_info'])
 tile_path = np.trunc(coefPaths / (16 ** 5))
 tile_step = np.trunc((coefPaths - tile_path * 16 ** 5) / 2)
 tile_phase = np.trunc((coefPaths - tile_path * 16 ** 5 - 2 * tile_step))
@@ -141,7 +141,7 @@ def tile_iteration(tile, out):
 		
 	if app.functionality['get_diff_indices']: # get the indices of the variant differences
 		out("Index of variant differences: {}\n".format(tile.clustalo_diffs))
-		
+
 	print("Finished search for tile {}".format(tile.index))
 
 

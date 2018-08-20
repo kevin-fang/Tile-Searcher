@@ -51,7 +51,7 @@ class TileApplication:
 
 	def save_data_args(self, args):
 		# save data to dictionary in application
-		self.data['hiq_info'] = args.hiq_info
+		self.data['tile_info'] = args.tile_info
 		self.data['assembly_gz'] = args.assembly_gz
 		self.data['assembly_fwi'] = args.assembly_fwi
 		self.data['keep'] = args.keep
