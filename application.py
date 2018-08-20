@@ -30,7 +30,8 @@ class TileApplication:
 
 	def set_functionality(self, args):
 		# parse functionality from input and save to dictionary
-		self.tiles.append(Tile(args.index))
+		for idx in args.index:
+			self.tiles.append(Tile(idx))
 		if args.get_location == None:
 			if args.assembly_fwi == None:
 				raise Exception("Cannot get tile location without --assembly-fwi argument.")
