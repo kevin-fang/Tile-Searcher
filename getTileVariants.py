@@ -121,15 +121,15 @@ def fill_bp_loc(tile_item):
 # out is a function that tells the program what to do with output - send to a file or print?
 def tile_iteration(tile, out):
 # get the location of tiles and store it because it will be important later
-	if app.functionality['get_location']: # get tile location, path, step phase
-		tile = fill_tile_info(tile)
+	tile = fill_tile_info(tile)
+	if app.functionality['location']: # get tile location, path, step phase	
 		out(str(tile).rstrip() + '\n')
 
-	if app.functionality['get_base_pair_locations']: # get base pair location
+	if app.functionality['base_pair_locations']: # get base pair location
 		tile = fill_bp_loc(tile)
 		out(tile.bp_output.rstrip() + '\n')
 
-	if app.functionality['print_variant_diffs']: # get variant differences using ClustalW
+	if app.functionality['variant_diffs']: # get variant differences using ClustalW
 		# fill the variant info for the file, in case needed later
 		tile = fill_variants_info(tile)
 		tile = fill_clustalo_entries(tile)
@@ -139,12 +139,18 @@ def tile_iteration(tile, out):
 			out("\n".join(item))
 			out('\n')
 		
-	if app.functionality['get_diff_indices']: # get the indices of the variant differences
+	if app.functionality['diff_indices']: # get the indices of the variant differences
 		out("Index of variant differences: {}\n".format(tile.clustalo_diffs))
 
-	print("Finished search for tile {}".format(tile.index))
+	print("Finished search for tile {}\n".format(tile.index))
 
 
 for tile in app.tiles:
-	with open("{}.txt".format(tile.index), 'w') as f:
-		tile_iteration(tile, f.write)
+	if app.write_to_file:
+		import os
+		if not os.path.exists('output'):
+			os.mkdir('output')
+		with open("output/{}.txt".format(tile.index), 'w') as f:
+			tile_iteration(tile, f.write)
+	else:
+		tile_iteration(tile, print)

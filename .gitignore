@@ -9,3 +9,4 @@ clients/tile-searcher-backend/node_modules/
 hiq-pgp-info
 clients/tile-searcher-react/node_modules/
 clients/node_modules/
+output/
