@@ -25,7 +25,8 @@ def parse_input(app):
 	# quit if no arguments were specified
 	# set functionality and data locations based on parsed arguments
 
-	if not any([args.location, args.variant_diffs, args.diff_indices, args.base_pair_locations]):
+	if args.location == None or args.variant_diffs == None or args.diff_indices == None or args.base_pair_locations == None:
+		#print([args.location, args.variant_diffs, args.diff_indices, args.base_pair_locations])
 		app.set_functionality(args)
 	else:
 		print("Setting functionality from config...")
@@ -61,6 +62,5 @@ def parse_input(app):
 		app.set_data_args(args)
 
 	app.set_tile_indices(args)
-	print(app.functionality)
 
 	return app
