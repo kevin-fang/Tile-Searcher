@@ -162,9 +162,9 @@ def tile_iteration(tile, out):
 		index_pos_map = list(zip(tile.clustalo_diffs, exact_locs))
 
 		if len(index_pos_map) == 0:
-			print("Only one variant found.")
+			out("Only one variant found.\n")
 		for position, index in index_pos_map:
-			print("Position on chromosome: {}, index of diff: {}".format(position, index))
+			out("Position on chromosome: {}, index of diff: {}\n".format(position, index))
 
 	print("Finished search for tile {}\n".format(tile.index))
 
