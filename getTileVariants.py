@@ -76,9 +76,11 @@ def fill_clustalo_entries(tile_item):
 	# split a single long variant string into a list of variants, separated by newline
 	variants = tile_item.variants.split('\n')[:-1]
 
+        if len(variants) == 1:
+            filled_tile.clustalo_output = ([[variants[0]]], "")
+            return filled_tile
 	# convert list to fasta for clustalo
-	fasta = clustalo.convert_list_to_fasta(variants)
-	# clustalo output goes (entries, diffs) - calculates both
+	fasta = clustalo.convert_list_to_fasta(variants) # clustalo output goes (entries, diffs) - calculates both
 	filled_tile.clustalo_output = clustalo.get_clustalo(fasta)
 	return filled_tile
 
@@ -118,6 +120,13 @@ def fill_bp_loc(tile_item):
 	except CalledProcessError as e:
 		raise Exception("assembly file not found.")
 
+def fill_snp_locations(tile_item):
+	filled_tile = deepcopy(tile_item)
+	
+def calc_var_diffs(tile_item):
+	filled_tile = deepcopy(tile_item)
+	return fill_clustalo_diffs(fill_clustalo_entries(fill_variants_info(filled_tile)))
+
 # out is a function that tells the program what to do with output - send to a file or print?
 def tile_iteration(tile, out):
 # get the location of tiles and store it because it will be important later
@@ -131,16 +140,31 @@ def tile_iteration(tile, out):
 
 	if app.functionality['variant_diffs']: # get variant differences using ClustalW
 		# fill the variant info for the file, in case needed later
-		tile = fill_variants_info(tile)
-		tile = fill_clustalo_entries(tile)
-		tile = fill_clustalo_diffs(tile)
+		tile = calc_var_diffs(tile)
+		tile.diffs_calculated = True
 
 		for item in tile.clustalo_entries:
 			out("\n".join(item))
 			out('\n')
 		
 	if app.functionality['diff_indices']: # get the indices of the variant differences
-		out("Index of variant differences: {}\n".format(tile.clustalo_diffs))
+		if not tile.diffs_calculated:
+			tile = calc_var_diffs(tile)			
+		#out("Index of variant differences: {}\n".format(tile.clustalo_diffs))
+		
+		import re
+		base_pairs = re.split(r'\s+', tile.bp_output)	
+
+		exact_locs = []
+		for diff in tile.clustalo_diffs:
+			exact_locs.append(diff - 24 + int(base_pairs[1]))
+		
+		index_pos_map = list(zip(tile.clustalo_diffs, exact_locs))
+
+		if len(index_pos_map) == 0:
+			print("Only one variant found.")
+		for position, index in index_pos_map:
+			print("Position on chromosome: {}, index of diff: {}".format(position, index))
 
 	print("Finished search for tile {}\n".format(tile.index))
 
