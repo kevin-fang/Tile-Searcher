@@ -20,6 +20,7 @@ List of commandline arguments:
 - `--variant-diffs` is included if the script should output the ClustalW alignment, showing the differences between the tile variants.  
 - `--base-pair-locations` is included if the script should output base pair locations of the tile.  
 - `--diff-indices` is included if the script should output the indices where variants are different.  
+- `--write-to-file` is included if the script should write the output to a file instead. By default, it writes to a folder called `output`.
 
 ### Deprecated:
 
