@@ -8,18 +8,23 @@ from subprocess import CalledProcessError, Popen, PIPE, STDOUT
 import clustalo, parseInput
 from application import TileApplication, Tile
 from copy import deepcopy
+import os
 
 # initialize new application
 app = TileApplication()
 
-# set up command line arguments
-parseInput.setup_parsing(app)
+if __name__ == "__main__":
+	# set up command line arguments
+	parseInput.setup_parsing(app)
 
-# parse command line arguments
-parseInput.parse_input(app)
+	# parse command line arguments
+	parseInput.parse_input(app)
 
-# ensure that the system has the commands it needs to search
-app.test_command_availability()
+	# ensure that the system has the commands it needs to search
+	app.test_command_availability()
+else:
+	parseInput.read_config(app)
+
 
 # set up information needed for tile search
 coefPaths = np.load(app.data['tile_info'])
@@ -76,9 +81,9 @@ def fill_clustalo_entries(tile_item):
 	# split a single long variant string into a list of variants, separated by newline
 	variants = tile_item.variants.split('\n')[:-1]
 
-        if len(variants) == 1:
-            filled_tile.clustalo_output = ([[variants[0]]], "")
-            return filled_tile
+	if len(variants) == 1:
+		filled_tile.clustalo_output = ([[variants[0]]], "")
+		return filled_tile
 	# convert list to fasta for clustalo
 	fasta = clustalo.convert_list_to_fasta(variants) # clustalo output goes (entries, diffs) - calculates both
 	filled_tile.clustalo_output = clustalo.get_clustalo(fasta)
@@ -120,9 +125,6 @@ def fill_bp_loc(tile_item):
 	except CalledProcessError as e:
 		raise Exception("assembly file not found.")
 
-def fill_snp_locations(tile_item):
-	filled_tile = deepcopy(tile_item)
-	
 def calc_var_diffs(tile_item):
 	filled_tile = deepcopy(tile_item)
 	return fill_clustalo_diffs(fill_clustalo_entries(fill_variants_info(filled_tile)))
@@ -131,13 +133,14 @@ from operator import itemgetter
 from itertools import groupby
 def group_continuous_diffs(clustalo_diffs):
 	groups = []
-	for _, j in groupby(enumerate(clustalo_diffs), lambda (k, x): k - x):
+	for _, j in groupby(enumerate(clustalo_diffs), lambda item: item[0] - item[1]):
 		groups.append(map(itemgetter(1), j))
 	return groups
 
 # out is a function that tells the program what to do with output - send to a file or print?
 def tile_iteration(tile, out):
-# get the location of tiles and store it because it will be important later
+		
+	# get the location of tiles and store it because it will be important later
 	tile = fill_tile_info(tile)
 	if app.functionality['location']: # get tile location, path, step phase	
 		out(str(tile).rstrip() + '\n')
@@ -195,14 +198,15 @@ def tile_iteration(tile, out):
 				out("Position range on chromosome: {}-{}, index range: {}-{}\n".format(position[0], position[1], index[0], index[1]))
 
 	print("Finished search for tile {}\n".format(tile.index))
+	return tile
 
-# iterate through input array of tiles
-for tile in app.tiles:
-	if app.write_to_file:
-		import os
-		if not os.path.exists('output'):
-			os.mkdir('output')
-		with open("output/{}.txt".format(tile.index), 'w') as f:
-			tile_iteration(tile, f.write)
-	else:
-		tile_iteration(tile, print)
+if __name__ == "__main__":
+	# iterate through input array of tiles
+	for tile in app.tiles:
+		if app.write_to_file:
+			if not os.path.exists('output'):
+				os.mkdir('output')
+			with open("output/{}.txt".format(tile.index), 'w') as f:
+				tile_iteration(tile, f.write)
+		else:
+			tile_iteration(tile, print)
