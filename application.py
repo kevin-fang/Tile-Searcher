@@ -4,11 +4,11 @@ from collections import defaultdict
 
 # test whether a command is available to the comptuer
 def test_command(command, error_msg):
-		try:
-			call(command, stdout=PIPE, stderr=PIPE)
-		except OSError as e:
-			if e.errno == os.errno.ENOENT:
-				raise Exception(error_msg)
+	try:
+		call(command, stdout=PIPE, stderr=PIPE)
+	except OSError as e:
+		if e.errno == os.errno.ENOENT:
+			raise Exception(error_msg)
 
 class Tile:
 	def __init__(self, index):
@@ -23,6 +23,7 @@ class Tile:
 		self.clustalo_output = None
 		self.clustalo_diffs = None
 		self.bp_output = None		
+		self.diffs_map = None
 
 	def to_dict(self):
 		info_dict = {}
@@ -30,7 +31,7 @@ class Tile:
 		info_dict['path'] = self.path
 		info_dict['chrom'] = self.tile_str.split(":")[1].replace("chr", "")
 		tile_location = self.bp_output.split('\n')
-		info_dict['position'] = tile_location[0].split('\t')[1].strip()
+		info_dict['position_start'] = tile_location[0].split('\t')[1].strip()
 		info_dict['position_end'] = tile_location[1].split('\t')[1].strip()
 		return info_dict
 

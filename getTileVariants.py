@@ -138,7 +138,10 @@ def group_continuous_diffs(clustalo_diffs):
 	return groups
 
 # out is a function that tells the program what to do with output - send to a file or print?
-def tile_iteration(tile, out):
+def tile_iteration(tile, out=print):
+	# give the option of suppressing output for function calling
+	if out == "suppress":
+		out = lambda x: False
 		
 	# get the location of tiles and store it because it will be important later
 	tile = fill_tile_info(tile)
@@ -187,6 +190,7 @@ def tile_iteration(tile, out):
 
 		# print results
 		index_pos_map = list(zip(output_diffs, exact_locs))
+		tile.diffs_map = index_pos_map
 
 		out("Variant diffs:\n")
 		if len(index_pos_map) == 0:
