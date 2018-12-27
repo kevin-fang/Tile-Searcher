@@ -10,6 +10,7 @@ def convert_list_to_fasta(sequences_list):
 def get_clustalo(sequence):
 	# split genomes by line
 	input_genomes = sequence.strip().split('\n')
+	print(input_genomes)
 
 	# create temporary FASTA file for alignment
 	fasta = ""

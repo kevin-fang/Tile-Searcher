@@ -24,6 +24,7 @@ if __name__ == "__main__":
 	app.test_command_availability()
 else:
 	parseInput.read_config(app)
+	app.test_command_availability()
 
 
 # set up information needed for tile search

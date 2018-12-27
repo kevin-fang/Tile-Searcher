@@ -20,6 +20,7 @@ class Tile:
 		self.step = None
 		self.tile_str = None
 		self.variants = None
+		self.needle_output = None
 		self.clustalo_output = None
 		self.clustalo_diffs = None
 		self.bp_output = None		
@@ -108,7 +109,7 @@ class TileApplication:
 		if self.functionality['base_pair_locations']: 
 			base_str += "Finding Tile Location, "
 		if self.functionality['print_variant_diffs']:
-			base_str += "Printing Variant Differences (ClustalW), "
+			base_str += "Printing Variant Differences (Needle), "
 		if self.functionality['diff_indices']:
 			base_str += "Finding Indices of Variant Differences, "
 		if self.functionality['base_pair_locations']:
@@ -125,4 +126,7 @@ class TileApplication:
 		if self.functionality['location'] or self.functionality['variant_diffs'] or self.functionality['diff_indices']:
 			test_command(['zgrep', '--help'], "zgrep is not installed or is not available in the PATH")
 		if self.functionality['variant_diffs'] or self.functionality['diff_indices']:
-			test_command(['clustalo', '--help'], "clustalo is not installed or is not avaialble in the PATH.")
+			try:
+				import Bio
+			except ImportError:
+				raise Exception("Biopython not installed (try running pip instalk biopython")
