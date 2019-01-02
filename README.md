@@ -2,7 +2,7 @@
 ### Kevin Fang, 2017-18
 A Python script that prints tile information, including step, path, phase. It also retrieves variants from assembly files and can perform Clustal Omega alignments on the variants.
 
-Note that to run the ClustalW alignment at the end to check for variant differences, you must have the [Clustal Omega](https://www.clustal.org/omega) package installed and have `clustalo` added to your path.
+Note that to run the ClustalW alignment at the end to check for variant differences, you must have the [Clustal Omega](http://www.clustal.org/omega/) package installed and have `clustalo` added to your path.
 
 To get up and running, set the Arvados API keys and run `./setup.sh` and then you can call `getTileVariants.py` with the appropriate arguments. 
 
