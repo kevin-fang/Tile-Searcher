@@ -6,11 +6,13 @@ USER root
 RUN apt-get update -y && \
     apt-get upgrade -y && \
     apt-get install -y wget \ 
-    gcc \
+        gcc \
         libbz2-dev \
+        libperl-dev \
         liblzma-dev \
         dtrx \
-    zlib1g-dev \
+        autoconf \
+        zlib1g-dev \
         make \
         python \
         python-pip \
@@ -21,18 +23,22 @@ RUN apt-get update -y && \
         libmysqlclient-dev \
         git \
         curl \
-        g++ && \
-    # install HTSLib for tile searching
-    wget --output-document=htslib-1.5.tar.bz2 https://github.com/samtools/htslib/releases/download/1.5/htslib-1.5.tar.bz2 && \
-    dtrx htslib-1.5.tar.bz2 && \
-    cd htslib-1.5 && \
-    ./configure && \
-    make && \
-    make install && \
-    cd .. && \ 
-    rm ./htslib-1.5.tar.bz2 && \
-    rm -rf htslib-1.5
+        g++ \
+        libgsl0-dev
 
+# install htslib and bcftools
+RUN git clone git://github.com/samtools/htslib.git && \
+    cd htslib && \
+    autoheader && autoconf && ./configure && make && make install && \
+    cd .. && \
+    git clone git://github.com/samtools/bcftools.git && \
+    cd bcftools && \
+    autoheader && autoconf && ./configure --enable-libgsl --enable-perl-filters && \
+    make && \
+    make install
+ 
+
+# alignment tools + variant decoder
 RUN apt-get install -y swig \
     clustalo \
     perl \
@@ -43,8 +49,11 @@ RUN apt-get install -y swig \
     cpan Try::Tiny && \
     cpan JSON 
 
-
+# Ensembl-VEP installer
 RUN git clone https://github.com/Ensembl/ensembl-vep && \
     cd ensembl-vep && \
     perl INSTALL.pl
    
+ENV PATH="/ensembl-vep:${PATH}"
+
+RUN pip install biopython
