@@ -11,7 +11,9 @@ keep: ./keep/by_id/su92l-4zz18-fkbdz2w6b25ayj3
 tile_info: ./tiling-files/all-info.npy
 #tile_info: ./tiling-files/hiq-pgp-info
 
-# which features to search for
+# location of gzipped reference vcf file. Needed for getRsids.py
+ref_vcf: ./keep/by_id/su92l-4zz18-v96bt8gwbsini81/GRCh37p13.vcf.gz
+
 features:
   - diff_indices
   - location
