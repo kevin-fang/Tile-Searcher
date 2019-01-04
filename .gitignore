@@ -1,4 +1,6 @@
 keep/
+fasta
+.ipynb_checkpoints/
 *.npy
 *.txt
 *.pyc
