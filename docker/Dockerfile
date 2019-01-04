@@ -56,4 +56,7 @@ RUN git clone https://github.com/Ensembl/ensembl-vep && \
    
 ENV PATH="/ensembl-vep:${PATH}"
 
-RUN pip install biopython
+RUN pip install biopython \
+    pyyaml
+
+RUN pip install description-extractor --process-dependency-links
