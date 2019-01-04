@@ -1,4 +1,5 @@
 keep/
+.ipynb_checkpoints/
 *.npy
 *.txt
 *.pyc

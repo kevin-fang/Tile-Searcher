@@ -31,7 +31,7 @@ def get_clustalo(sequence):
 	stdout = proc.communicate()
 
 	# delete temporary files and save results
-	os.remove(input_filename)
+	#os.remove(input_filename)
 
 	aligned = ""
 	with open(output_filename, 'r') as f:
