@@ -1,5 +1,5 @@
 # Tile Searcher
-### Kevin Fang, 2017-18
+### Kevin Fang, 2017-19
 Python scripts that allow for information to be extracted from tiles.
 
 Contains a script (`getTileVariants.py`) that retrieves tile information, including step, path, phase, and variants from assembly files that and can also perform Clustal Omega alignments on the variants.
