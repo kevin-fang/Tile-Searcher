@@ -6,6 +6,8 @@ Contains a script (`getTileVariants.py`) that retrieves tile information, includ
 
 Contains another script (`getRsids.py`) to retrieve RSIDs for specific variants. 
 
+A Dockerfile is also provided for easy dependency installation. To call it, run `./runInDocker.sh "<normal command line arguments here>"`. For example, `./runInDocker.sh "./getTileVariants -i 1234"`. You may have to change the docker image name in the shell script, though.
+
 Note that to run the ClustalW alignment at the end to check for variant differences, you must have the [Clustal Omega](http://www.clustal.org/omega/) package installed and have `clustalo` added to your path.
 
 To get up and running, set the Arvados API keys and run `./setup.sh` and then you can call `getTileVariants.py` with the appropriate arguments. Note that `getRsids.py` _requires_ that the all the files requirements are specified in `config.yml`.

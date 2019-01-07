@@ -1,4 +1,5 @@
 keep/
+__pycache__/
 fasta
 .ipynb_checkpoints/
 *.npy
