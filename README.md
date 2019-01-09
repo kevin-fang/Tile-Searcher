@@ -37,3 +37,60 @@ List of commandline arguments for `getTileVariants.py`:
 The script `getRsids.py` is used to retrieve a list of possible RSIDs for SNPs/INDELS located in a variant of a genome. It compares a variant with the most common tile, and uses Mutalyzer 2 to locate the variations. 
 
 A sample call to check for possible RSIDs on the first variant of tile 1234 would look like `./getRsids.py -i 1234 -v 1`. Note that to call `getRsids.py`, `config.yml` _must_ be set.
+
+
+## Tile Searching as a function
+
+If you would like to use the output of the tile searching script in Python, you do not need to manually parse the output. `getTileVariants.py` is available as a function, callable from python. See the example below:  
+```python
+# import modules for tile variant searching
+import getTileVariants, application
+
+# search for index 1234
+tile = application.Tile(1234)
+tile_info = getTileVariants.tile_iteration(tile, out="suppress")
+# options for output: "suppress" prevents anything from being printed, out=print will print output.
+
+info_dict = tile_info.to_dict()
+
+'''
+info_dict looks like this:
+{
+    'chrom': '9',
+    'path': '01c4',
+    'position_end': '136140011',
+    'position_start': '136139786',
+    'step': '0369'
+}
+'''
+```
+
+There is more tile information available in the `tile_info` object. See below:   
+```python
+class Tile:
+    def __init__(self, index):
+        ...
+
+        # tile path, step, and phase 
+        self.path = None
+        self.phase = None
+        self.step = None
+
+        # string representation of tile
+        self.tile_str = None
+
+        # tile variants
+        self.variants = None
+
+        # raw output from clustalo
+        self.clustalo_output = None
+
+        # calculated diffs from clustalo
+        self.clustalo_diffs = None
+        
+        # raw text output from base pair location searching
+        self.bp_output = None       
+
+        # mapping from tile indexes to chromosomal locations
+        self.diffs_map = None
+```
