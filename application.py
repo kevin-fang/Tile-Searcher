@@ -55,19 +55,19 @@ class TileApplication:
         if args.location is None and args.assembly_fwi is None:
             raise Exception(
                 "Cannot get tile location without --assembly-fwi argument.")
-        if args.variant_diffs is None and args.keep is None:
+        if args.variant_diffs is None and args.sglf is None:
             raise Exception(
-                "Cannot get variant diffs without --keep argument.")
-        if args.diff_indices is None and args.keep is None:
-            raise Exception("Cannot get diff indices without --keep argument.")
+                "Cannot get variant diffs without --sglf argument.")
+        if args.diff_indices is None and args.sglf is None:
+            raise Exception("Cannot get diff indices without --sglf argument.")
         if args.base_pair_locations and args.assembly_gz is None:
             raise Exception(
                 "Cannot get base pair locations without --assembly-gz argument.")
 
     def verify_config(self, config_args):
-        if "diff_indices" in config_args['features'] and not config_args['keep']:
+        if "diff_indices" in config_args['features'] and not config_args['sglf']:
             raise Exception(
-                "Cannot get diff indices without keep in configuration file.")
+                "Cannot get diff indices without sglf in configuration file.")
         if "location" in config_args['features'] and not config_args['assembly_fwi']:
             raise Exception(
                 "Cannot get location without assembly_fwi in configuration file.")
@@ -76,13 +76,13 @@ class TileApplication:
                 "Cannot get base pair locations without assembly_gz in configuration file.")
         if "variant_diffs" in config_args['features'] and not config_args['assembly_gz']:
             raise Exception(
-                "Cannot get variant diffs without keep in configuration file.")
+                "Cannot get variant diffs without sglf in configuration file.")
 
     def set_config_data_args(self, config_args):
         self.data['tile_info'] = config_args['tile_info']
         self.data['assembly_gz'] = config_args['assembly_gz']
         self.data['assembly_fwi'] = config_args['assembly_fwi']
-        self.data['keep'] = config_args['keep']
+        self.data['sglf'] = config_args['sglf']
 
     def set_functionality_from_config(self, config_args):
 
@@ -112,7 +112,7 @@ class TileApplication:
         self.data['tile_info'] = args.tile_info
         self.data['assembly_gz'] = args.assembly_gz
         self.data['assembly_fwi'] = args.assembly_fwi
-        self.data['keep'] = args.keep
+        self.data['sglf'] = args.sglf
 
     def get_functionality(self):
         # create a string that displays what the application will calculate

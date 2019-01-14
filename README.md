@@ -1,21 +1,30 @@
-# Tile Searcher
-### Kevin Fang, 2017-19
-Python scripts that allow for information to be extracted from tiles.
+# Tile Variant Searcher & RSID Lookup
+### Kevin Fang, Curoverse Research, 2017-19
+Python scripts that extract information from tiles.
 
-Contains a script (`getTileVariants.py`) that retrieves tile information, including step, path, phase, and variants from assembly files that and can also perform Clustal Omega alignments on the variants.
+Contains a script (`getTileVariants.py`) that retrieves tile step, path, phase, and variants from assembly files that and can also perform Clustal Omega alignments on the variants.
 
 Contains another script (`getRsids.py`) to retrieve RSIDs for specific variants. 
 
-A Dockerfile is also provided for easy dependency installation. To call it, run `./runInDocker.sh "<command line arguments here>"`. For example, `./runInDocker.sh "./getTileVariants -i 1234"`. If the docker build is not named kfang/tile-tools, then change the docker image name in the shell script.
+#### Setup instructions to get running in Docker  
+1. Make sure Docker is installed on your machine  
+2. Clone and open this repository in the command line (`git clone https://github.com/kevin-fang/tile-searcher && cd tile-searcher`)  
+3. Run `docker pull kfangcurii/tile-tools`  
+4. Set up your Arvados API Tokens (skip this if you're running on an Arvados shell node)
+5. Run `./setup.sh` to mount keep
+6. Search for tiles using the following command: `./runInDocker.sh "<command line arguments here>"`, using command line arguments normally. For example, `./runInDocker.sh "./getTileVariants.py -i 1234 56789"` or `./runInDocker.sh "./getRsids.py -i 1234 -v 1"`.
 
-To get up and running, set the Arvados API keys and download your assembly files. The included `./setup.sh` file downloads GRCh37 assembly files and high quality naming info for the Harvard PGP. Then, modify `config.yml` to reflect where the data is located. A sample configuration file is provided. Note that for `getTileVariants.py`, you can choose which config arguments to include depending on search requirements. However, `getRsids.py` uses every feature of `getTileVariants.py`, so it _requires_ that the all the files requirements are specified in `config.yml`.
-
+#### Notes:
+- If the docker build is not named `kfangcurii/tile-tools`, then change the docker image name in the shell script. Alternatively, build it yourself from the Dockerfile included in the `docker/` directory and change the docker name in the shell script
+- Modify `config.yml` to reflect where the data is located. A sample configuration file is provided that represents the full tile set. 
+- For `getTileVariants.py`, you can choose which config arguments to include depending on search requirements. Instructions are included in `config.yml` file.
+- However, `getRsids.py` uses every feature of `getTileVariants.py`, so it _requires_ that the all the files requirements are specified in `config.yml`.
 
 ## Tile Variant Searching
 
 The script `getTileVariants.py` is used to retrieve tile information, including step, path, phase, and variants from assembly files. Also contains a multiple sequence aligner to compare with all the variants (using Clustal Omega alignment).
 
-Note that to run the ClustalW alignment at the end to check for variant differences, you must have the [Clustal Omega](http://www.clustal.org/omega/) package installed and have `clustalo` added to your path.
+Note that to run the ClustalO alignment at the end to check for variant differences, you must have the [Clustal Omega](http://www.clustal.org/omega/) package installed and have `clustalo` added to your path.
 
 Deprecated: ability to use command line arguments (too cluttered). Instead, call `python getTileVariants.py -i 1234 67890` after setting `config.yml`.
 
@@ -23,8 +32,7 @@ Deprecated: ability to use command line arguments (too cluttered). Instead, call
 
 The script `getRsids.py` is used to retrieve a list of possible RSIDs for SNPs/INDELS located in a variant of a genome. It compares a variant with the most common tile, and uses Mutalyzer 2 to locate the variations. 
 
-A sample call to check for possible RSIDs on the first variant of tile 1234 would look like `./getRsids.py -i 1234 -v 1`. Note that to call `getRsids.py`, `config.yml` _must_ be set.
-
+A sample call to check for possible RSIDs on the first variant of tile 1234 would look like `./getRsids.py -i 1234 -v 1`.
 
 ## Tile Searching as a function
 
@@ -33,10 +41,8 @@ If you would like to use the output of the tile searching script in Python, you 
 # import modules for tile variant searching
 import getTileVariants, application
 
-# search for index 1234
-tile = application.Tile(1234)
-tile_info = getTileVariants.tile_iteration(tile, out="suppress")
-# options for output: "suppress" prevents anything from being printed, out=print will print output.
+# search for index 1234, while suppressing processing output
+tile_info = getTileVariants.tile_iteration(1234, suppress_output=True)
 
 info_dict = tile_info.to_dict()
 
@@ -109,3 +115,4 @@ info_dict looks like this:
 }
 '''
 ```
+

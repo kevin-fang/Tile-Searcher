@@ -84,7 +84,7 @@ def fill_tile_info(tile_item):
 
 def fill_variants_info(tile_item):
     filled_tile = deepcopy(tile_item)
-    filename = "{}/{}.sglf.gz".format(app.data['keep'], tile_item.path)
+    filename = "{}/{}.sglf.gz".format(app.data['sglf'], tile_item.path)
     try:
         filled_tile.variants = subprocess.check_output(
             'zgrep {}.00.{} {}'.format(
@@ -145,15 +145,15 @@ def fill_bp_loc(tile_item):
     # read base pair locations from assembly files
     cmdToRun = "bgzip -c -b %d -s %d -d %s | grep -B1 \"%s\s\"" % (
         begin, sequence, app.data['assembly_gz'], filled_tile.step)
-
+    
     try:
         # call bgzip to locate base pair locations
-        subprocess.call("bgzip -r " + app.data['assembly_gz'], shell=True)
+        subprocess.Popen(["bgzip", "-c", app.data['assembly_gz']], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
         output = subprocess.check_output(cmdToRun, shell=True)
         filled_tile.bp_output = output
         return filled_tile
     except CalledProcessError as e:
-        raise Exception("assembly file not found.")
+        raise Exception("assembly file not found: {}".format(str(e)))
 
 
 def calc_var_diffs(tile_item):
