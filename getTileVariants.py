@@ -25,10 +25,11 @@ if __name__ == "__main__":
     # parse command line arguments
     parseInput.parse_input(app)
 
-    # ensure that the system has the commands it needs to search
-    app.test_command_availability()
 else:
     parseInput.read_config(app)
+    
+# ensure that the system has the commands it needs to search
+app.test_command_availability()
 
 
 # set up information needed for tile search
@@ -173,12 +174,13 @@ def group_continuous_diffs(clustalo_diffs):
 # to a file or print?
 
 
-def tile_iteration(tile, out=print, all_functionality=False):
-    # give the option of suppressing output for function calling
-    if out == "suppress":
-        def out_fn(x): return False
-    else:
-        out_fn = out
+def tile_iteration(tile, suppress_output=False, all_functionality=False):
+    if isinstance(tile, int):
+        tile = Tile(tile)
+        
+    def out_fn(msg):
+        if not suppress_output:
+            print(msg)
 
     if all_functionality:
         app.functionality['location'] = True
@@ -235,7 +237,6 @@ def tile_iteration(tile, out=print, all_functionality=False):
                 exact_locs.append((convert(diff[0]), convert(diff[-1])))
                 output_diffs.append((diff[0], diff[-1]))
 
-        # print results
         index_pos_map = list(zip(output_diffs, exact_locs))
         tile.diffs_map = index_pos_map
 
@@ -252,18 +253,12 @@ def tile_iteration(tile, out=print, all_functionality=False):
                     "Position range on chromosome: {}-{}, index range: {}-{}\n".format(
                         position[0], position[1], index[0], index[1]))
 
-    if out != "suppress":
-        print("Finished search for tile {}\n".format(tile.index))
+    out_fn("Finished search for tile {}\n".format(tile.index))
     return tile
 
 
 if __name__ == "__main__":
     # iterate through input array of tiles
     for tile in app.tiles:
-        if app.write_to_file:
-            if not os.path.exists('output'):
-                os.mkdir('output')
-            with open("output/{}.txt".format(tile.index), 'w') as f:
-                tile_iteration(tile, f.write)
-        else:
-            tile_iteration(tile, print)
+        print('---')
+        tile_iteration(tile)
