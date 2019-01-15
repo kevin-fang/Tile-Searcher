@@ -84,7 +84,7 @@ class Mutation:
 # create a mutation object from the description extractor information
 
 
-def get_mutation(mutation_string, info_tile):
+def get_mutation(mutation_string, info_tile, common_seq):
     mutation_symbols = ['subst', 'delins', 'del', 'ins', 'dup', 'inv']
     for mutation in mutation_symbols:
         if mutation in mutation_string:
@@ -158,6 +158,7 @@ def rsid_search(tile_index, variant, suppress_output=True):
         if not suppress_output:
             print("Detected spanning tile. Deleting extra part...")
 
+
     # run mutalyzer description extractor for alignment data
     allele = describe_dna(common_seq, tile_seq)
     changes = str(allele)
@@ -167,7 +168,7 @@ def rsid_search(tile_index, variant, suppress_output=True):
     changes = changes.replace(']', '')
     changes = changes.split(';')
 
-    mutations = map(lambda x: get_mutation(x, info_tile), changes)
+    mutations = map(lambda x: get_mutation(x, info_tile, common_seq), changes)
 
     # offset all mutations
     map(lambda x: x.offset(info_tile.to_dict()['position_start']), mutations)
